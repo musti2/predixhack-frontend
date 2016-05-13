@@ -1,0 +1,168 @@
+
+<dom-module is="px-gauge">
+	<template>
+		<input class="dial"
+		id="input"
+		type="text"
+		value="{{value}}"
+		format="{{format}}"
+		data-width="{{gaugeWidth}}"
+		data-height="{{gaugeHeight}}"
+		data-fgColor="{{fgColor}}"
+		data-bgColor="{{bgColor}}"
+		data-skin="tron"
+		data-min="{{min}}"
+		data-max="{{max}}"
+		data-thickness=".2"
+		data-readOnly="true"
+		data-displayPrevious="true"
+		tag="{{tag}}">
+	</template>
+</dom-module>
+
+<script>
+Polymer({
+	is: 'px-gauge',
+
+	properties: {
+		value: {
+			type: Number,
+			value: 0
+		},
+		min: {
+			type: Number,
+			value: 0
+		},
+		max: {
+			type: Number,
+			value: 100
+		},
+		gaugeWidth: {
+			type: Number
+		},
+		gaugeHeight: {
+			type: Number
+		},
+		fgColor: {
+			type: String,
+			value: '#ffec03'
+		},
+		bgColor: {
+			type: String,
+			value: '#212e35'
+		},
+		readOnly: {
+			type: Boolean,
+			value: true
+		},
+		format: {
+			type: String,
+			value: "%"
+		},
+		tag: {
+			type: String,
+			value: ""
+		},
+
+
+	},
+
+	observers: [
+		// These functions only run once the observed properties contain
+	    // something other than undefined.
+		'_valueChanged(value)',
+		'_getData(tag)'
+    ],
+
+	ready: function(){
+		this.createGauge();
+		this._getData();
+		setInterval(this._getData, 10000);
+	},
+
+	_valueChanged: function(value) {
+	    $('.dial').val(value).trigger('change');
+	},
+
+	createGauge: function(){
+		var me = this;
+		me.gauge = this.$.input;
+		me.format = this.format;
+
+		var darkGaugeConfig = {
+			'height': this.gaugeHeight,
+			'width': this.gaugeWidth,
+			'min': this.min,
+			'max': this.max,
+            'skin': 'tron',
+            'thickness': 0.1,
+            'lineCap': 'round',
+            'fgColor': this.fgColor,
+            'bgColor': this.bgColor,
+            'displayPrevious': true,
+            'readOnly': true,
+            'inputColor': '#fff',
+            format : function (value) {
+                return value + me.format;
+            }
+        };
+
+		require(['jquery-knob'], function(knob){
+
+			$(me.gauge).knob(darkGaugeConfig);
+			$(me.gauge).trigger('change');
+		});
+	},
+
+	_getData: function(tag){
+		var me = this;
+		var configAjax = document.createElement('iron-ajax');
+	  	configAjax.url = 'config.json';
+	  	configAjax.handleAs = "json";
+	  	configAjax.addEventListener('response', function(evt) {
+
+	    	config = evt.detail.response;
+
+	    	var ironAjaxEl = document.createElement('iron-ajax');
+	    		ironAjaxEl.url = config.uaaURL;
+	    		ironAjaxEl.handleAs = "json";
+
+			var auth = btoa( config.ts_client+":" +config.ts_secret);
+			ironAjaxEl.headers = {"Authorization": "Basic "+auth};
+			ironAjaxEl.params = {"grant_type":"client_credentials","client_id":config.ts_client};
+
+			ironAjaxEl.addEventListener('response', function(evt) {
+				if(evt.detail.response.access_token) {
+					token = evt.detail.response.access_token;
+				} else {
+					console.log("no token");
+					return;
+				}
+
+	        	var ironAjaxTemp = document.createElement('iron-ajax');
+	        		ironAjaxTemp.url = config.timeseriesURL;
+					ironAjaxTemp.headers = {
+						"Predix-Zone-Id": config.ts_zone,
+						"Authorization": token,
+						"Content-Type":"application/json"
+					};
+
+				ironAjaxTemp.body='{"start":1347365421469,"end":1647365424469,"tags":[{"name":' +tag+'}]}';
+				ironAjaxTemp.method="POST";
+				ironAjaxTemp.addEventListener('response', function(evt) {
+	          		data = evt.detail.response.tags[0].results[0].values;
+					if(data.length){
+						var newArr = _.last(data);
+						var newValue = _.initial(newArr);
+						var currentTemp = newValue[1];
+						$(me.gauge).val(currentTemp).trigger('change');
+					}
+				});
+				ironAjaxTemp.generateRequest();
+			});
+	      ironAjaxEl.generateRequest();
+	  	});
+		configAjax.generateRequest();
+	}
+});
+</script>

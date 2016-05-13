@@ -1,0 +1,772 @@
+<!--
+PX Time Series is a Predix Experience ('Px') Component CARD
+-->
+
+<dom-module id="px-ts-card">
+    <style>
+        :host {
+            font-family: 'GE Inspira' !important;
+        }
+        span {
+            color: #fff;
+        }
+        .muted {
+            opacity: 0.5 !important;
+        }
+        .create-button {
+            border-radius: 3px;
+            box-sizing: border-box;
+            color: currentColor;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+            outline: 0;
+            border: 0;
+            display: inline-block;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding: 0 6px;
+            color: #fff;
+            line-height: 36px;
+            min-height: 36px;
+            background: #2b2b2b;
+            white-space: nowrap;
+            min-width: 88px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 0.77em;
+            font-style: inherit;
+            font-variant: inherit;
+            font-family: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);
+        }
+        .remove-button {
+            border-radius: 3px;
+            box-sizing: border-box;
+            color: currentColor;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+            outline: 0;
+            border: 0;
+            display: inline-block;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+            margin-top: 1.7em !important;
+            margin-right: 2em !important;
+            color: #fff;
+            line-height: 20px;
+            min-height: 20px;
+            background: #f15854;
+            white-space: nowrap;
+            min-width: 88px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: 500;
+            font-size: 11px;
+            font-style: inherit;
+            font-variant: inherit;
+            font-family: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            overflow: hidden;
+            transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);
+        }
+        h4 span.time {
+            color: #fff;
+        }
+        .vaadin-grid-cell.vaadin-grid {
+            padding: 10px 24px 0 24px !important;
+        }
+        .paper-list__primary-action {
+            vertical-align: middle;
+        }
+        paper-dialog.size-position {
+            position: fixed;
+            margin: 0 auto;
+            width: 370px;
+            height: 370px;
+            overflow: auto;
+            border: 2px solid;
+            border-color: inherit;
+            background-color: #121f23;
+            color: #2b2b2b;
+        }
+        paper-dialog > :last-child {
+            margin-bottom: 24px;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .custom {
+            background: #3d3d3d;
+            color: #fff !important;
+        }
+        h3.px-card-header {
+            color: #fff !important;
+        }
+        .px-chart-tooltip b{
+            color: #fff !important;
+        }
+        px-card {
+            margin: 0.2em;
+            padding: 0.5em;
+            opacity: 1;
+            background: #283437;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <template>
+        <px-card context="{{context}}" header-text="Time Series" icon="fa-area-chart">
+
+                <!-- spinner -->
+                <px-spinner size="20" id="spinner"></px-spinner>
+
+                <!-- dialoge for selectors -->
+                <button class="create-button" on-click="openDialog"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Create New Series </button>
+                <paper-dialog id="dialog" class="size-position" no-cancel-on-outside-click>
+                    <vaadin-combo-box id="combobox" label="Select Data" items="{{comboBoxItems}}" selected-item="{{selectedItem}}"></vaadin-combo-box>
+                    <vaadin-combo-box id="colorInput" label="Select Color" items="{{colorItems}}" selected-item="{{selectedColor}}"></vaadin-combo-box>
+                    <!-- <vaadin-combo-box id="typeInput" label="Select Type" items="{{chartTypes}}" selected-item="{{selectedSeriesType}}"></vaadin-combo-box> -->
+                    <div class="btn-group">
+                      <button on-click="_createNewChart">Create</button>
+                      <button on-click="closeDialog">Cancel </button>
+                    </div>
+                </paper-dialog>
+
+                <!-- timeseries charts -->
+                <div class="flex flex--col">
+                  <button class="btn btn--small remove-button" id="gasChart-button" on-click="_removeSeries" style="margin-right: 2em; float: right; margin-top: 0 !important">Remove Series</button>
+                  <px-chart chart-state="{{sharedState}}"
+                        id="gasChart"
+                        height="200"
+                        legend="{{chartLegend}}"
+                        plot-border-color="#fff"
+                        series-color-order='["dv-dark-red","dv-dark-blue","dv-dark-yellow","dv-dark-green"]' chart-background-color="{{chartBackground}}"
+                        zoom-controls="hidecontrols"
+                        navigator-disabled>
+
+                        <px-chart-yaxis title='{"text": "PPM"}' id="firstAxis" offset="0"></px-chart-yaxis>
+                        <px-chart-series-histogram units="ppm" id="Natural Gas" upper-threshold="1" line-width="2">
+                        </px-chart-series-histogram>
+                        <px-chart-series-histogram units="ppm" id="Combustable Gas" upper-threshold="1" line-width="2">
+                        </px-chart-series-histogram>
+                        <px-chart-series-histogram units="ppm" id="Toxic Gas" upper-threshold="1" line-width="2">
+                        </px-chart-series-histogram>
+                  </px-chart>
+                </div>
+                <div class="flex flex--col">
+                  <button class="btn btn--small remove-button" id="tempChart-button" on-click="_removeSeries" style="margin-right: 2em; float: right; margin-top: 0 !important">Remove Series</button>
+                  <px-chart chart-state="{{sharedState}}"
+                        id="tempChart"
+                        series-events-color="#ffa5a5"
+                        height="200"
+                        legend="{{chartLegend}}"
+                        plot-border-color="#fff"
+                        series-color-order='["dv-dark-green", "dv-dark-blue","dv-dark-yellow"]' chart-background-color="{{chartBackground}}"
+                        zoom-controls="hidecontrols"
+                        navigator-disabled>
+
+                        <px-chart-yaxis title='{"text": "&deg;C"}' id="firstAxis" offset="0"></px-chart-yaxis>
+                        <px-chart-series-line data-events="{{tempEvents}}" units="&deg;C" id="Temperature" upper-threshold="1" line-width="2">
+                        </px-chart-series-line>
+                        <px-chart-series-line data-events="{{humidEvents}}" units="&deg;C" id="Humidity" upper-threshold="1" line-width="2">
+                        </px-chart-series-line>
+                  </px-chart>
+                </div>
+                <!-- <template is="dom-repeat" items="{{sensorList}}" id="chartList">
+                        <button class="btn btn--small btn--tertiary" id="{{item.name}}" on-click="_removeSeries" style="margin-right: 2em; float: right;">Remove Series</button>
+                        <px-chart chart-state={{sharedState}}
+                            class="dynamic-chart"
+                            id="{{item.name}}"
+                            height="200"
+                            tooltip-kind='hc'
+                            plot-border-color="#fff"
+                            series-color-order='["dv-dark-red","dv-dark-red","dv-dark-yellow","dv-dark-green"]' chart-background-color="{{chartBackground}}"
+                            zoom-controls="hidecontrols"
+                            navigator-disabled>
+
+                            <px-chart-yaxis id="dynamicChart" title='{"text": "PPM"}' id="{{item.name}}" offset="0" labels="{"style": {"fontSize": 8rem, "color": #000000}, "y": 5}"></px-chart-yaxis>
+                            <px-chart-series-histogram data="{{item.data}}" name="{{item.name}}" line-width="2">
+                            </px-chart-series-histogram>
+                        </px-chart>
+                </template> -->
+
+        </px-card>
+    </template>
+</dom-module>
+
+<script>
+    // helper function to set multiple attributes to DOM
+    function setAttributes(el, attrs) {
+        for(var key in attrs) {
+            el.setAttribute(key, attrs[key]);
+        }
+    };
+
+    Polymer({
+
+        is: 'px-ts-card',
+
+        properties: {
+
+            timeSeriesData: {
+                type: Array,
+                value: []
+            },
+
+            chartBackground: {
+                type: String,
+                value: null
+            },
+
+            comboBoxItems: {
+                type: Array,
+                value: [
+                    {label: 'Temperature', value: 1},
+                    {label: 'Humidity', value: 2},
+                    {label: 'Flame', value: 4},
+                    {label: 'Combustable Gas', value: 5},
+                    {label: 'Natural Gas', value: 6},
+                    {label: 'Toxic Gas', value: 7}
+                ]
+            },
+
+            chartTypes: {
+                type: Array,
+                value: [
+                    {label: 'Line', value: 1},
+                    {label: 'Histogram', value: 2},
+                    {label: 'Scatter', value: 3},
+                    {label: 'Bar', value: 4}
+                ]
+            },
+
+            colorItems: {
+                type: Array,
+                value: [
+                    {label: 'Dark Green', value: 'dv-dark-green', hex:"#059748"},
+                    {label: 'Dark Blue', value: 'dv-dark-blue', hex:"#265dab"},
+                    {label: 'Dark Yellow', value: 'dv-dark-yellow', hex:"#c7b42e"},
+                    {label: 'Dark Orange', value: 'dv-dark-orange', hex:"#df5c24"},
+                    {label: 'Dark Pink', value: 'dv-dark-pink', hex:"#e5126f"},
+                    {label: 'Dark Purple', value: 'dv-dark-purple', hex:"#7b3a96"},
+                    {label: 'Dark Brown', value: 'dv-dark-brown', hex:"#9d722a"},
+                    {label: 'Dark Red', value: 'dv-dark-red', hex:"#cb2027"},
+                    {label: 'Dark Grey', value: 'dv-dark-green', hex:"#000000"}
+                ]
+            },
+            selectedItem: {
+                type: String
+            },
+            selectedColor: {
+                type: String
+            },
+            selectedSeriesType: {
+                type: String
+            },
+
+            showForm: {
+                type: Boolean,
+                value: false
+            },
+            chartArray: {
+                type: Array,
+                value: []
+            },
+            defaultCharts: {
+                type: Array,
+                value: []
+            },
+            yAxis: {
+                type: Object,
+                value: {
+                    gridLineColor: "#7c7c84",
+                    lineWidth: 0,
+                    gridLineWidth: 0.5,
+                    tickAmount: 4,
+                    min: 0,
+                    allowDecimals: false,
+                    labels: {
+                      style: {
+                        color: '#fff',
+                        fontSize: '0.66em'
+                      },
+                      x: 15
+                    }
+                }
+            },
+            xAxis: {
+                type: Object,
+                value: {
+                    lineColor: '#fff',
+                    lineWidth: 0,
+                    tickWidth: 2,
+                    gridLineColor: '#7c7c84',
+                    gridLineWidth: 0,
+                    startOnTick: true,
+                    labels: {
+                      style: {
+                        color: '#fff',
+                        fontSize: '0.66em'
+                      }
+                    }
+                }
+            }
+        },
+
+        ready: function(){
+            var dialog = this.$.dialog;
+            this.openDialog = function(){
+              dialog.open();
+            }
+            this.closeDialog = function(){
+              dialog.close();
+            }
+            this.chartLegend = {
+              enabled: true,
+              useHTML: true,
+              verticalAlign: 'top',
+              align: 'left',
+              layout: 'horizontal',
+              floating: true,
+              y: 10,
+              itemStyle: {
+                fontSize: '12px',
+                fontWeight: 'normal',
+                color: '#fff'
+              }
+            };
+            this.getDataCreateChart();
+        },
+        // get data and update charts
+        getDataCreateChart: function(){
+
+            var self = this;
+
+            var configAjax = document.createElement('iron-ajax');
+            var spinner = this.$.spinner;
+            var buttons = document.querySelectorAll('button');
+
+            configAjax.url = 'config.json';
+            configAjax.handleAs = "json";
+            configAjax.addEventListener('response', function(evt) {
+
+                config = evt.detail.response;
+                var ironAjaxEl = document.createElement('iron-ajax');
+                    ironAjaxEl.url = config.uaaURL;
+                    ironAjaxEl.handleAs = "json";
+                var auth = btoa( config.ts_client+":" +config.ts_secret)
+                ironAjaxEl.headers = {"Authorization": "Basic "+auth};
+                ironAjaxEl.params = {"grant_type":"client_credentials","client_id":config.ts_client};
+                
+                ironAjaxEl.addEventListener('response', function(evt) {
+                    if(evt.detail.response.access_token) {
+                        token = evt.detail.response.access_token;
+                    } else {
+                        console.log("no token")
+                        return;
+                    }
+                    var ironAjaxEl2 = document.createElement('iron-ajax');
+                    ironAjaxEl2.url = config.timeseriesURL;
+                    ironAjaxEl2.headers = {
+                        "Predix-Zone-Id": config.ts_zone,
+                        "Authorization": token,
+                        "Content-Type":"application/json"
+                    };
+                    var now = moment().format('x');
+                    ironAjaxEl2.body='{"start":"3w-ago","end":'+now+',"tags":[{"name":["canary_1.mq2", "canary_1.mq5", "canary_1.mq9", "canary_1.temp", "canary_1.humd"], "order": "asc"}]}';
+                    ironAjaxEl2.method="POST";
+                    var gasChart = self.$.gasChart;
+                    var tempChart = self.$.tempChart;
+
+                    ironAjaxEl2.addEventListener('response', function(evt) {
+                        // only set data and generate charts if there's data
+                        var data = evt.detail.response.tags[0].results[0].values;
+                        if(data.length > 0){
+
+                            self.timeSeriesData = evt.detail.response.tags;
+
+                            var combusData = evt.detail.response.tags[0].results[0].values;
+                            var naturalGasData = evt.detail.response.tags[1].results[0].values;
+                            var toxicGasData = evt.detail.response.tags[2].results[0].values;
+                            var temperatureData = evt.detail.response.tags[3].results[0].values;
+                            var humidityData = evt.detail.response.tags[4].results[0].values;
+                            var maxTemp = _.max(temperatureData, function(readings){ return readings[1]; });
+                            var maxHumd = _.max(humidityData, function(readings){ return readings[1]; });
+                            // we have to set conditions here as px-chart render time is extremely delayed and console logs error such as 'chart does not exist'
+                            // only run if temp/humid chart exists
+                            if (tempChart.chart){
+                                tempChart.chart.showLoading();
+                                self.defaultCharts.push(tempChart);
+                                tempChart.updateSeries('Temperature', temperatureData, false);
+                                tempChart.updateSeries('Humidity', humidityData, false);
+                                tempChart.chart.xAxis[0].update(self.xAxis);
+                                tempChart.chart.yAxis[0].update(self.yAxis);
+                                tempChart.chart.hideLoading();
+                                self.tempEvents = [{
+                                    time: maxTemp[0],
+                                    id: 'max',
+                                    label: 'Max Temp'
+                                  }
+                                ];
+                                self.humidEvents = [{
+                                    time: maxHumd[0],
+                                    id: 'max-humd',
+                                    label: 'Max Humidity'
+                                }]
+                            }
+                            // only run if gas chart exists
+                            if (gasChart.chart){
+                                gasChart.chart.showLoading();
+                                self.defaultCharts.push(gasChart);
+                                gasChart.updateSeries('Natural Gas', naturalGasData, false);
+                                gasChart.updateSeries('Combustable Gas', combusData, false);
+                                gasChart.updateSeries('Toxic Gas', toxicGasData, false);
+                                gasChart.chart.xAxis[0].update(self.xAxis);
+                                gasChart.chart.yAxis[0].update(self.yAxis);
+                                gasChart.chart.hideLoading();
+                            }
+
+                        } else {
+                            console.log('no data');
+                            if (tempChart && gasChart){
+                                tempChart.chart.showLoading('No Data Available');
+                                gasChart.chart.showLoading('No Data Available');
+                            }
+                        }
+                    });
+                    ironAjaxEl2.generateRequest();
+
+                    if (gasChart || tempChart){
+                        this.updateData = setInterval(function(){
+                            console.log('updating..');
+                            ironAjaxEl2.generateRequest();
+                        }, 60000);
+                    }
+
+                    spinner.hide();
+                });
+                ironAjaxEl.generateRequest();
+            });
+            configAjax.generateRequest();
+        },
+        // remove chart on click
+        _removeSeries: function(e){
+            var defaultCharts = Polymer.dom(this.root).querySelectorAll('px-chart');
+            for (var i = 0; i < defaultCharts.length; i++){
+                if (e.target.id.includes(defaultCharts[i].id)){
+                    if (defaultCharts[i].chart){
+                        e.target.remove();
+                        defaultCharts[i].chart.destroy();
+                        defaultCharts[i].remove();
+                    }
+                };
+            }
+        },
+        // show form when creating new chart
+        _showForm: function(){
+            this.showForm = !this.showForm;
+        },
+        // function to create user specified chart
+        _createNewChart: function(){
+
+            // helper function
+            function setAttributes(el, attrs) {
+              for(var key in attrs) {
+                el.setAttribute(key, attrs[key]);
+              }
+            }
+
+            var self = this;
+
+            var spinner = document.querySelector('px-spinner');
+            var combobox = Polymer.dom(this.root).querySelector('#combobox');
+            // create new chart
+            var randomNumber = Math.floor(Math.random() * 10) + 1;
+            
+            var lightBox = document.createElement('div').setAttribute('class', 'l-box');
+
+            var actionDiv = document.createElement('div');
+                actionDiv.setAttribute('style', 'flex-direction: row; display: flex; align-items: center; max-width: 100%; align-content: center; justify-content: flex-end;');
+
+            // create button for each chart
+            var removeChartButton = document.createElement('button');
+                removeChartButton.innerHTML = 'Remove Series';
+                removeChartButton.setAttribute('class', 'remove-button');
+
+            var addSeriesList = document.createElement('vaadin-combo-box');
+                addSeriesList.setAttribute('style', 'width: 200px; margin-right: 3em;');
+                addSeriesList.label = "Add New Data to Timeseries";
+
+            // create chart and set attributes
+            var newChart = document.createElement('px-chart');
+                newChart.setAttribute('id', randomNumber.toFixed(1));
+                newChart.setAttribute('chart-state', '{{sharedState}}');
+                newChart.height = '200';
+                newChart.legend = this.chartLegend;
+                newChart.tooltipKind = 'hc';
+                newChart.plotBorderColor= "#fff";
+                newChart.seriesColorOrder = [this.selectedColor.value];
+                newChart.chartBackgroundColor = this.chartBackground;
+                newChart.zoomControls = "hidecontrols";
+                newChart.navigatorDisabled = "true";
+                newChart.margin = [50, 30, 30, 30];
+
+            /*
+             * WORK IN PROGRESS
+             */
+            // if (this.selectedSeriesType.label.includes('Bar')){
+            //     newChart.type = 'bar';
+            // } else if (this.selectedSeriesType.label.includes('Line')){
+            //     newChart.type = 'line';
+            // } else if (this.selectedSeriesType.label.includes('scatter')){
+            //     newChart.type = 'scatter';
+            // } else if (this.selectedSeriesType.label.includes('Histo')){
+            //     newChart.type = 'histogram';
+            // }
+
+            // set button ID to same as chart ID
+            removeChartButton.id = newChart.id;
+            addSeriesList.id = newChart.id;
+            addSeriesList.items = this.comboBoxItems;
+
+            // new chart axis
+            var newChartAxis = document.createElement('px-chart-yaxis');
+                newChartAxis.offset = 0;
+                newChart.appendChild(newChartAxis);
+
+            // y Axis Config
+            var yAxis = {
+                allowDecimals: false,
+                gridLineColor: "#7c7c84",
+                tickColor: "rgb(59,59,63)",
+                lineWidth: 0,
+                gridLineWidth: 0.5,
+                tickAmount: 4,
+                opposite: true,
+                labels: {
+                  style: {
+                    color:'#fff',
+                    fontSize: '14px',
+                    fill:'#fff'
+                  },
+                  x: 10,
+                  y: 0
+                }
+            };
+            // x Axis Config
+            var xAxis = {
+                lineColor: '#fff',
+                lineWidth: 0,
+                tickWidth: 2,
+                gridLineColor: '#7c7c84',
+                gridLineWidth: 0,
+                labels: {
+                  style: {
+                    color: '#fff',
+                    fontSize: '14px'
+                  }
+                }
+            }
+            // get Tag name from selected value
+            function getTagName(item){
+              if (item.includes('Temp')){
+                return 'temp';
+              } else if (item.includes('Hum')){
+                return 'humd';
+              } else if (item.includes('Combus')){
+                return 'mq2';
+              } else if (item.includes('Natural')){
+                return 'mq5';
+              } else if (item.includes('Toxi')){
+                return 'mq9';
+              } else if (item.includes('Flame')){
+                return 'flame';
+              } else if (item.includes('Water')){
+                return 'water';
+              }
+            };
+
+
+            var configAjax = document.createElement('iron-ajax');
+            configAjax.url = 'config.json';
+            configAjax.handleAs = "json";
+
+            combobox.addEventListener('selected-item-changed', function() {
+                this.selectedItem = getTagName(combobox.selectedItem.label);
+            });
+
+            if (this.selectedItem){
+                var tag = getTagName(this.selectedItem.label);
+                var seriesName = this.selectedItem.label;
+                var seriesId = this.selectedItem.label;
+
+                configAjax.addEventListener('response', function(evt) {
+
+                    config = evt.detail.response;
+
+                    var ironAjaxEl = document.createElement('iron-ajax');
+                        ironAjaxEl.url = config.uaaURL;
+                        ironAjaxEl.handleAs = "json";
+
+                    var auth = btoa( config.ts_client+":" +config.ts_secret)
+                    ironAjaxEl.headers = {"Authorization": "Basic "+auth};
+                    ironAjaxEl.params = {"grant_type":"client_credentials","client_id":config.ts_client};
+                    
+                    ironAjaxEl.addEventListener('response', function(evt) {
+                        if(evt.detail.response.access_token) {
+                            token = evt.detail.response.access_token;
+                        } else {
+                            console.log("no token")
+                            return;
+                        }
+                        var ironAjaxEl2 = document.createElement('iron-ajax');
+
+                        ironAjaxEl2.url = config.timeseriesURL;
+                        ironAjaxEl2.headers = {
+                            "Predix-Zone-Id": config.ts_zone,
+                            "Authorization": token,
+                            "Content-Type":"application/json"
+                        };
+                        var now = moment().format('x');
+                        ironAjaxEl2.body='{"start":"1w-ago","end":'+now+',"tags":[{"name":"canary_1.'+tag+'","order": "asc"}]}';
+                        ironAjaxEl2.method="POST";
+                        // combustable timeseries - mq2
+                        ironAjaxEl2.addEventListener('response', function(evt) {
+                            var data = evt.detail.response.tags[0].results[0].values;
+                            var maxReading = _.max(data, function(readings){ return readings[1]; });
+
+                            newChart.addSeries({
+                              id: tag,
+                              name: seriesName,
+                              data: data
+                            });
+
+                            newChart.chart.showLoading();
+
+                            newChart.chart.xAxis[0].update(xAxis);
+                            newChart.chart.yAxis[0].update(yAxis);
+                            newChart.chart.series[0].update({ lineWidth:2 });
+
+                            newChart.chart.hideLoading();
+
+                            if (seriesName.includes('Temp')){
+                                newChart.chart.yAxis[0].update({
+                                    min: 0,
+                                    max: 50
+                                });
+                            }
+
+                            removeChartButton.addEventListener('click', function(evt){
+                                if (this.id === newChart.id){
+                                    newChart.style.display = 'none';
+                                    newChart.chart.destroy();
+                                    addSeriesList.remove();
+                                    actionDiv.remove();
+                                    this.remove();
+                                }
+                            });
+                        });
+                        ironAjaxEl2.generateRequest();
+                    });
+                    ironAjaxEl.generateRequest();
+                });
+                configAjax.generateRequest();
+                var card = this.$$('px-card');
+                // append chart
+                Polymer.dom(card).appendChild(newChart);
+                // append div for action buttons
+                Polymer.dom(card).appendChild(actionDiv);
+                // append button to remove chart
+                Polymer.dom(actionDiv).appendChild(removeChartButton);
+                // append button to add series to chart
+                Polymer.dom(actionDiv).appendChild(addSeriesList);
+                // hide the spinner
+                spinner.hide();
+                // close the form if it's open
+                this.showForm = !this.showForm;
+                // push newly created chart to array 
+                this.chartArray.push(newChart);
+                // set shared state on all charts
+                this.getCharts();
+
+                // add event listener to list item below chart if user wants to overlay new series on chart
+                var seriesOverlayCount = 0;
+                addSeriesList.addEventListener('selected-item-changed', function() {
+                    seriesOverlayCount++
+
+                    var randColor = self.colorItems[Math.floor(Math.random() * self.colorItems.length)];
+
+
+                    if (addSeriesList.id == newChart.id){
+                        var selectedTag = getTagName(addSeriesList.selectedItem.label);
+                        var newAjax = document.createElement('iron-ajax');
+                        newAjax.url = config.timeseriesURL;
+                        newAjax.headers = {
+                            "Predix-Zone-Id": config.ts_zone,
+                            "Authorization": token,
+                            "Content-Type":"application/json"
+                        };
+                        var now = moment().format('x');
+                        newAjax.method="POST";
+                        newAjax.body = '{"start":"1w-ago","end":'+now+',"tags":[{"name":"canary_1.'+selectedTag+'","order": "asc"}]}';
+                        newAjax.addEventListener('response', function(evt){
+                            newChart.chart.showLoading();
+                            var newData = evt.detail.response.tags[0].results[0].values;
+                            newChart.chart.addAxis({
+                                id: addSeriesList.selectedItem.label,
+                                opposite: false,
+                                gridLineColor: "#7c7c84",
+                                lineWidth: 0,
+                                gridLineWidth: 0.5,
+                                labels:{
+                                    style: {
+                                        color:'#fff'
+                                    },
+                                    x: 3
+                                }
+                            });
+                            newChart.addSeries({
+                                id: selectedTag,
+                                name: addSeriesList.selectedItem.label,
+                                data: newData,
+                                lineWidth: 2
+                            });
+                            newChart.chart.series[seriesOverlayCount].update({
+                                color: randColor.hex,
+                                yAxis: addSeriesList.selectedItem.label
+                            });
+                            newChart.chart.hideLoading();
+                        });
+                        newAjax.generateRequest();
+                    }
+                });
+
+            } else {
+              alert('No Data Selected');
+            }
+            dialog.close();
+            var top = $(newChart).position().top;
+            $(window).scrollTop( top );
+        },
+        // set sharedState on any new chart
+        getCharts: function(){
+            for (var i = 0; i < this.chartArray.length; i++){
+              this.chartArray[i].setAttribute('chart-state', '{{sharedState}}');
+            }
+        },
+        // apply px-card behaviors
+        behaviors: [px.card]
+    });
+</script>

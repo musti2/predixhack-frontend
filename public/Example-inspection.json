@@ -1,0 +1,46 @@
+{"ats":{"quality":[
+{"owner":"Virgilio","activity":"Contingency","order":"20160203.0","id":160,"due":"02/03/2016"},
+{"owner":"Wilfredo","activity":"Improvement","order":"20160227.0","id":153,"due":"02/27/2016"},
+{"owner":"Tony","activity":"Infrastructure","order":"20160305.0","id":165,"due":"03/05/2016"}],
+
+"ehs":[
+{"owner":"Manoj","activity":"Preventative","order":"20160219.0","id":207,"due":"02/19/2016"},
+{"owner":"Wilfredo","activity":"Safety","order":"20160219.0","id":208,"due":"02/19/2016"},
+{"owner":"Wilfredo","activity":"Housekeeping","order":"20160312.0","id":214,"due":"03/12/2016"},
+{"owner":"Manoj","activity":"Preventative","order":"20160411.0","id":213,"due":"04/11/2016"}]},
+
+"name":"QSC Inspection","members":[
+{"username":105044039,"name":"Mico Del Prado"},
+{"username":105046824,"name":"Kamran Bashir"},
+{"username":212432551,"name":"Neil Loquez"},
+{"username":212451819,"name":"Eric Vallestero"},
+{"username":212465189,"name":"Moses Olushola"}],
+
+"wip":[{"customer":"QATAR GAS","job":"2901327","stations":[[4.0,3.5],[3.0,9.01],[0.5,22.009999999999998],[5.5,12.52],[2.0,4.01]],"sales":68.0,"model":"MS5002D","component":"Combustion liner std","cwd":"09/30/2015","pcd":"02/19/2016","order":"20160219"},
+{"customer":"QATAR GAS","job":"2901334","stations":[[4.5,4.0],[3.0,9.01],[11.5,22.0],[6.5,14.02],[0,2.02]],"sales":68.0,"model":"MS5002C","component":"Combustion liner std","cwd":"09/22/2015","pcd":"02/20/2016","order":"20160220"},
+{"customer":"QATAR GAS","job":"2901285","stations":[[4.5,4.0],[10.0,9.01],[19.0,22.0],[11.5,14.03],[0,2.01]],"sales":68.0,"model":"MS5002D","component":"Combustion liner std","cwd":"09/15/2015","pcd":"02/20/2016","order":"20160220"},
+{"customer":"KOC","job":"2901574","stations":[[4.0,7.0],[1.0,1.0],[0,6.01],[0.5,12.0],[0,0.53]],"sales":68.0,"model":"MS5002","component":"Transition piece std","cwd":"03/31/2016","pcd":"02/21/2016","order":"20160221"},
+{"customer":"KOC","job":"2901578","stations":[[3.5,3.01],[1.0,5.0],[0,6.0],[0.5,12.02],[0,0.51]],"sales":68.0,"model":"MS5002B","component":"Transition piece std","cwd":"03/31/2016","pcd":"02/24/2016","order":"20160224"},
+{"customer":"KOC","job":"2901575","stations":[[3.5,3.0],[1.0,5.0],[0,6.01],[0.5,12.02],[0,0.51]],"sales":68.0,"model":"MS5002B","component":"Transition piece std","cwd":"03/31/2016","pcd":"02/25/2016","order":"20160225"},
+{"customer":"KOC","job":"2901567","stations":[[4.0,4.0],[0,9.01],[0,22.030000000000005],[1.5,14.0],[0,0.51]],"sales":68.0,"model":"MS5002","component":"Combustion liner std","cwd":"03/31/2016","pcd":"02/25/2016","order":"20160225"}],
+
+"tips":["Are we holding any maintanance plan for our gas cryogenic tanks","This concern were open related to concerned #47602 that requires regular maintenance of the gas tanks/cryogenic tanks","Tool box talk: electric furnace between g1 & power nozzle area is creating hot temperature impact that can cause health problem","Oil storage room were congested with so many different type of oil, used oil & brand new oil that need to identify each usage and store in safe place with label","During work station audit in power nozzle area, operator request to have welding chairs which will eliminate ergonomic affect to operator","During the work station audit","Describe the evidence: during work station audit on coating area"],
+
+"stations":["Receive","Disassemble","Blast & clean","Dimensional check","Report"],"update":"2016-02-20 14:02:45.276000","charts":{"percentage":{"output":[100,150,42],"otd":[100,76,76],"ehs":[75,100,100],"quality":[100,0,100],"utilization":[73,43,10]},"value":{"output":[2,30,30],"otd":[0,7,7],"ehs":[3,0,15],"quality":[6,0,0],"utilization":[165,1174,1174]}}}
+
+
+
+{"otd":{
+"QSC":{
+"ROTOR":{"percentage":{"output":[0,0,0],"otd":[0,40,40]},"value":{"output":[0,5,5],"otd":[0,3,3]}},
+"NOZZLE":{"percentage":{"output":[0,0,0],"otd":[0,66,66]},"value":{"output":[0,12,12],"otd":[0,4,4]}},
+"COMBUSTION":{"percentage":{"output":[0,0,0],"otd":[0,53,53]},"value":{"output":[0,28,28],"otd":[0,13,13]}},
+"INSPECTION":{"percentage":{"output":[0,0,0],"otd":[0,76,76]},"value":{"output":[0,30,30],"otd":[0,7,7]}}},
+
+"HSC":{
+"ROTOR":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},
+"NOZZLE":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},
+"COMBUSTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},
+"INSPECTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}}},
+
+"ALG":{"ROTOR":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},"NOZZLE":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,1,1],"otd":[0,1,1]}},"COMBUSTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,1,1],"otd":[0,1,1]}},"INSPECTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}}},"FLR":{"ROTOR":{"percentage":{"output":[0,0,0],"otd":[0,50,50]},"value":{"output":[0,2,2],"otd":[0,1,1]}},"NOZZLE":{"percentage":{"output":[0,0,0],"otd":[0,38,38]},"value":{"output":[0,13,13],"otd":[0,8,8]}},"COMBUSTION":{"percentage":{"output":[0,0,0],"otd":[0,100,100]},"value":{"output":[0,1,1],"otd":[0,0,0]}},"INSPECTION":{"percentage":{"output":[0,0,0],"otd":[0,12,12]},"value":{"output":[0,8,8],"otd":[0,7,7]}}},"AUS":{"ROTOR":{"percentage":{"output":[0,0,0],"otd":[0,83,83]},"value":{"output":[0,6,6],"otd":[0,1,1]}},"NOZZLE":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},"COMBUSTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,1,1],"otd":[0,1,1]}},"INSPECTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}}},"MSC":{"ROTOR":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},"NOZZLE":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},"COMBUSTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}},"INSPECTION":{"percentage":{"output":[0,0,0],"otd":[0,0,0]},"value":{"output":[0,0,0],"otd":[0,0,0]}}}},"update":"2016-02-21 14:04:54.165000"}

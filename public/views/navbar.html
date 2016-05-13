@@ -1,0 +1,76 @@
+<!-- Navbar -->
+<div class="layout" ng-controller="MainCtrl">
+    <div class="layout__item u-5/6">
+        <div class="pure-menu pure-menu-horizontal">
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item pure-menu-selected"><a ui-sref="dashboard" class="pure-menu-link">Dashboard</a></li>
+                <!-- QSC -->
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                    <a ui-sref="qscinspection" id="menuLink1" class="pure-menu-link">Qatar</a>
+                    <ul class="pure-menu-children">
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="qscinspection" class="pure-menu-link">Inspection</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="qsccombustion" class="pure-menu-link">Combustion</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="qscrotor" class="pure-menu-link">Rotor</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="qscnozzle" class="pure-menu-link">Nozzle</a></li>
+                    </ul>
+                </li>
+                <!-- AUS -->
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                    <a ui-sref="ausoverview" id="menuLink1" class="pure-menu-link">Australia</a>
+                    <ul class="pure-menu-children">
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="ausoverview" class="pure-menu-link">Dashboard</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="ausgates" class="pure-menu-link">Gate View</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="aussinglegatesview" class="pure-menu-link">Single Gate View</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="ausinspection" class="pure-menu-link">Inspection</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="auscombustion" class="pure-menu-link">Combustion</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="ausrotor" class="pure-menu-link">Rotor</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="ausnozzle" class="pure-menu-link">Nozzle</a></li>
+                    </ul>
+                </li>
+                <!-- HSC -->
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                    <a ui-sref="hscinspection" id="menuLink1" class="pure-menu-link">Houston</a>
+                    <ul class="pure-menu-children">
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="hscinspection" class="pure-menu-link">Inspection</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="hsccombustion" class="pure-menu-link">Combustion</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="hscrotor" class="pure-menu-link">Rotor</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="hscnozzle" class="pure-menu-link">Nozzle</a></li>
+                    </ul>
+                </li>
+                <!-- ALG -->
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                    <a ui-sref="alginspection" id="menuLink1" class="pure-menu-link">Algeria</a>
+                    <ul class="pure-menu-children">
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="alginspection" class="pure-menu-link">Inspection</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="algcombustion" class="pure-menu-link">Combustion</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="algrotor" class="pure-menu-link">Rotor</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="algnozzle" class="pure-menu-link">Nozzle</a></li>
+                    </ul>
+                </li>
+                <!-- FLR -->
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                    <a ui-sref="flrinspection" id="menuLink1" class="pure-menu-link">Florence</a>
+                    <ul class="pure-menu-children">
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="flrinspection" class="pure-menu-link">Inspection</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="flrcombustion" class="pure-menu-link">Combustion</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="flrrotor" class="pure-menu-link">Rotor</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="flrnozzle" class="pure-menu-link">Nozzle</a></li>
+                    </ul>
+                </li>
+                <!-- MSC -->
+                <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+                    <a ui-sref="mscinspection" id="menuLink1" class="pure-menu-link">Malaysia</a>
+                    <ul class="pure-menu-children">
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="mscinspection" class="pure-menu-link">Inspection</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="msccombustion" class="pure-menu-link">Combustion</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="mscrotor" class="pure-menu-link">Rotor</a></li>
+                        <li class="pure-menu-item"><a data-ng-class="{ active: $state.includes('root.parent') }" ui-sref="mscnozzle" class="pure-menu-link">Nozzle</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layout__item u-1/6">
+        <px-login></px-login>
+    </div>
+</div>

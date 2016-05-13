@@ -1,0 +1,13 @@
+---
+applications:
+  - name: canary-pi
+    buildpack: predix_openresty_buildpack
+    path: dist
+    memory: 64M
+    stack: cflinuxfs2
+    services:
+            - canary-app-asset # change this to your redis service instance name
+            - canary-timeseries
+            - canary-uaa
+    env:
+      UAA_SERVER_URL: https://16946739-93fd-40ed-b61e-a12cf7b3d0b8.predix-uaa.run.aws-usw02-pr.ice.predix.io

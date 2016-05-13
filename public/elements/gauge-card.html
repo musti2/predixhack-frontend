@@ -1,0 +1,389 @@
+
+<script src="../bower_components/tms-gauges/gauge.js/dist/gauge.js"></script>
+<dom-module id="px-gauge">
+	<template>
+	<style>
+	
+	#gauge {
+		max-width: 100%;
+    height: auto;
+	}
+	
+	.gaugediv {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	.gauge-text {
+	  position: absolute;
+	  text-align: center;
+	  font-weight: bold;
+	  color: #000;
+	  position: absolute;
+	  top: 32px;
+	  left: 0;
+	  right: 0;
+	  text-align: center;
+	  font-weight: bold;
+	  color: black;
+	}
+
+	.pure-g > div {
+	    -webkit-box-sizing: border-box;
+	    -moz-box-sizing: border-box;
+	    box-sizing: border-box;
+	}
+
+	.l-box {
+	    padding: 1em;
+	    background: #fff;
+	    min-width: 120px;
+	    border: 1px solid #8b8d8f;
+	}
+
+	.donut {
+	  padding: 10px;
+	}
+
+	.alpha {
+	  font-size: 5rem;
+	  line-height: 1.0666666667; }
+
+	.beta {
+	  font-size: 4rem;
+	  line-height: 1; }
+
+	.gamma {
+	  font-size: 3rem;
+	  line-height: 1.3333333333; }
+
+	.delta {
+	  font-size: 2rem;
+	  line-height: 1.3333333333; }
+
+	.epsilon {
+	  font-size: 1.3333333333rem;
+	  line-height: 1; }
+
+	.zeta {
+	  font-size: 0.8rem;
+	  line-height: 1.6666666667; }
+
+	/**
+	 * Margin and padding helper classes. Use these to tweak layout on a micro
+	 * level.
+	 *
+	 * `.u-(m|p)(t|r|b|l|h|v)(-|+|0) {}` = utility - margin/padding top/right/bottom/left/horizontal/vertical less/more/none
+	 */
+	/**
+	     * Add tiny margins.
+	     */
+	.u-m-- {
+	  margin: 0.3333333333rem !important; }
+
+	.u-mt-- {
+	  margin-top: 0.3333333333rem !important; }
+
+	.u-mr-- {
+	  margin-right: 0.3333333333rem !important; }
+
+	.u-mb-- {
+	  margin-bottom: 0.3333333333rem !important; }
+
+	.u-ml-- {
+	  margin-left: 0.3333333333rem !important; }
+
+	.u-mh-- {
+	  margin-right: 0.3333333333rem !important;
+	  margin-left: 0.3333333333rem !important; }
+
+	.u-mv-- {
+	  margin-top: 0.3333333333rem !important;
+	  margin-bottom: 0.3333333333rem !important; }
+
+	/**
+	     * Add small margins.
+	     */
+	.u-m- {
+	  margin: 0.6666666667rem !important; }
+
+	.u-mt- {
+	  margin-top: 0.6666666667rem !important; }
+
+	.u-mr- {
+	  margin-right: 0.6666666667rem !important; }
+
+	.u-mb- {
+	  margin-bottom: 0.6666666667rem !important; }
+
+	.u-ml- {
+	  margin-left: 0.6666666667rem !important; }
+
+	.u-mh- {
+	  margin-right: 0.6666666667rem !important;
+	  margin-left: 0.6666666667rem !important; }
+
+	.u-mv- {
+	  margin-top: 0.6666666667rem !important;
+	  margin-bottom: 0.6666666667rem !important; }
+
+	/**
+	     * Add large margins.
+	     */
+	.u-m\00002b {
+	  margin: 1.3333333333rem !important; }
+
+	.u-mt\00002b {
+	  margin-top: 1.3333333333rem !important; }
+
+	.u-mr\00002b {
+	  margin-right: 1.3333333333rem !important; }
+
+	.u-mb\00002b {
+	  margin-bottom: 1.3333333333rem !important; }
+
+	.u-ml\00002b {
+	  margin-left: 1.3333333333rem !important; }
+
+	.u-mh\00002b {
+	  margin-right: 1.3333333333rem !important;
+	  margin-left: 1.3333333333rem !important; }
+
+	.u-mv\00002b {
+	  margin-top: 1.3333333333rem !important;
+	  margin-bottom: 1.3333333333rem !important; }
+
+	/**
+	     * Add huge margins.
+	     */
+	.u-m\00002b\00002b {
+	  margin: 2rem !important; }
+
+	.u-mt\00002b\00002b {
+	  margin-top: 2rem !important; }
+
+	.u-mr\00002b\00002b {
+	  margin-right: 2rem !important; }
+
+	.u-mb\00002b\00002b {
+	  margin-bottom: 2rem !important; }
+
+	.u-ml\00002b\00002b {
+	  margin-left: 2rem !important; }
+
+	.u-mh\00002b\00002b {
+	  margin-right: 2rem !important;
+	  margin-left: 2rem !important; }
+
+	.u-mv\00002b\00002b {
+	  margin-top: 2rem !important;
+	  margin-bottom: 2rem !important; }
+
+	/**
+	     * Remove margins.
+	     */
+	.u-m0 {
+	  margin: 0 !important; }
+
+	.u-mt0 {
+	  margin-top: 0 !important; }
+
+	.u-mr0 {
+	  margin-right: 0 !important; }
+
+	.u-mb0 {
+	  margin-bottom: 0 !important; }
+
+	.u-ml0 {
+	  margin-left: 0 !important; }
+
+	.u-mh0 {
+	  margin-right: 0 !important;
+	  margin-left: 0 !important; }
+
+	.u-mv0 {
+	  margin-top: 0 !important;
+	  margin-bottom: 0 !important; }
+
+	/**
+	     * Tiny negative margins.
+	     */
+	.u--m-- {
+	  margin: -0.3333333333rem !important; }
+
+	.u--mt-- {
+	  margin-top: -0.3333333333rem !important; }
+
+	.u--mr-- {
+	  margin-right: -0.3333333333rem !important; }
+
+	.u--mb-- {
+	  margin-bottom: -0.3333333333rem !important; }
+
+	.u--ml-- {
+	  margin-left: -0.3333333333rem !important; }
+
+	.u--mh-- {
+	  margin-right: -0.3333333333rem !important;
+	  margin-left: -0.3333333333rem !important; }
+
+	.u--mv-- {
+	  margin-top: -0.3333333333rem !important;
+	  margin-bottom: -0.3333333333rem !important; }
+
+	/**
+	     * Switch left and right margins when right-to-left language settings in use.
+	     */
+	[dir=rtl] .u-mr {
+	  margin-right: 0 !important;
+	  margin-left: 1rem !important; }
+
+	[dir=rtl] .u-ml {
+	  margin-right: 1rem !important;
+	  margin-left: 0 !important; }
+
+	[dir=rtl] .u-mr- {
+	  margin-right: 0 !important;
+	  margin-left: 0.6666666667rem !important; }
+
+	[dir=rtl] .u-ml- {
+	  margin-right: 0.6666666667rem !important;
+	  margin-left: 0 !important; }
+
+	[dir=rtl] .u-mr-- {
+	  margin-right: 0 !important;
+	  margin-left: 0.3333333333rem !important; }
+
+	[dir=rtl] .u-ml-- {
+	  margin-right: 0.3333333333rem !important;
+	  margin-left: 0 !important; }
+
+	[dir=rtl] .u-mr\00002b {
+	  margin-right: 0 !important;
+	  margin-left: 1.3333333333rem !important; }
+
+	[dir=rtl] .u-ml\00002b {
+	  margin-right: 1.3333333333rem !important;
+	  margin-left: 0 !important; }
+
+	[dir=rtl] .u-mr\00002b\00002b {
+	  margin-right: 0 !important;
+	  margin-left: 2rem !important; }
+
+	[dir=rtl] .u-ml\00002b\00002b {
+	  margin-right: 2rem !important;
+	  margin-left: 0 !important; }
+	</style>
+		<div class="gaugediv">
+			<canvas percentage="{{value}}" id="gauge" color="{{color}}" width="75" height="75"></canvas>
+			<span class="gauge-text" id="g1textfield">0%</span>
+			<h5 class="u-mt0 u-mb0">{{delayText}} <span>{{delayType}}</span></h5>
+			<p class="zeta u-mt0 u-mb0">{{chartText}}</p>
+		</div>
+	</template>
+</dom-module>
+<script>
+		Polymer({
+			is: 'px-gauge',
+
+			properties: {
+
+				delayText: String,
+				delayType: String,
+				
+				percentage: {
+					type: Number,
+					observer: 'drawChartDebounced'
+				},
+
+				value: {
+					type: Number,
+					value: 0,
+					observer: 'drawChartDebounced'
+				},
+				
+				color: {
+					type: String,
+					value: '#ffcf45'
+				},
+
+				options: {
+					type: Object,
+					value: {
+						lines: 12, // The number of lines to draw
+	          angle: 0.24, // The length of each line
+	          lineWidth: 0.15, // The line thickness
+	          pointer: {
+	              length: 0.9, // The radius of the inner circle
+	              strokeWidth: 0.035, // The rotation offset
+	              color: '#000000' // Fill color
+	          },
+	          percentColors: [[0.0, "#a9d70b" ], [0.9, "#f9c802"], [1.0, "#ff0000"]],
+	          limitMax: 'true',
+						colorStart: '#60bd68',   // Colors
+	 					colorStop: '#C0C0DB',    // just experiment with them
+	          strokeColor: '#E0E0E0',
+	          generateGradient: false
+					}
+				}
+			},
+
+			drawChartDebounced: function(data, previous) {
+	        this.debounce('drawGauges', function() {
+	        		delete this.gauge;
+	            this.drawGauges();
+	            this.setValues();
+	        }, 200);
+	    },
+
+	    getGaugeColor: function(value){
+	    	if (value <= 50){
+	    		this.color = "#df5c24";
+	    	} else if (value > 50 && value < 90){
+	    		this.color = "#eddd46";
+	    	} else {
+	    		this.color = "#75d835";
+	    	}
+	    },
+
+			getValues: function(){
+					var self = this;
+					this.getGaugeColor(this.value);
+
+					self.gaugeEl= this.$.gauge;
+					self.gaugeEl.width = 80;
+					self.gaugeEl.height = 80;
+
+					self.g1textfield = this.$.g1textfield;
+					self.opts = this.options;
+
+			},
+
+			drawGauges: function(){
+					this.getValues();
+					var self = this;
+					self.opts.colorStart = this.color;
+
+					this.gauge = new Donut(self.gaugeEl).setOptions(self.opts);
+					this.gauge.animationSpeed = 10;
+		      this.gauge.maxValue = 100;
+		      this.gauge.set(0);
+		      this.gauge.setTextField(self.g1textfield);
+			},
+
+			setValues: function(){
+					if(!isNaN(this.value)){
+						this.gauge.set(parseFloat(this.value));
+					} else if (!isNaN(this.value) && this.value == 0){
+						this.gauge.set(0);
+					}
+			},
+
+			ready: function(){
+				this.drawGauges();
+			}
+
+		})
+</script>
